@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Kuczynski Rewriter"
+description = "Rewrite target text using retrieved Kuczynski corpus passages, with a choice of ChatGPT, Anthropic, DeepSeek, or Grok."
+version = "1.0.0"
+id = "artifacts/kuczynski-rewriter"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18514
+
+[services.development]
+run = "pnpm --filter @workspace/kuczynski-rewriter run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/kuczynski-rewriter", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/kuczynski-rewriter/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18514"
+BASE_PATH = "/"

@@ -11,6 +11,38 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /rewriter/status:
+    get:
+      operationId: getRewriterStatus
+      responses:
+        "200":
+          description: Actual configuration status; configured does not imply verified.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewriterStatus"
+  /rewriter/rewrite:
+    post:
+      operationId: rewriteText
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RewriteInput"
+      responses:
+        "200":
+          description: Source-grounded rewrite
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewriteResult"
+        "400":
+          description: Invalid input
+        "502":
+          description: Corpus or model request failed
+        "503":
+          description: Configuration incomplete
   /healthz:
     get:
       operationId: healthCheck
@@ -26,6 +58,51 @@ paths:
                 $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
+    RewriterStatus:
+      type: object
+      required: [keyConfigured, corpusConfigured, aiConfigured, message, providers]
+      properties:
+        keyConfigured: { type: boolean }
+        corpusConfigured: { type: boolean }
+        aiConfigured: { type: boolean }
+        message: { type: string }
+        providers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Provider"
+    Provider:
+      type: object
+      required: [id, label, model]
+      properties:
+        id: { type: string, enum: [chatgpt, anthropic, deepseek, grok] }
+        label: { type: string }
+        model: { type: string }
+    RewriteInput:
+      type: object
+      required: [text, provider]
+      properties:
+        text: { type: string, minLength: 1, maxLength: 30000 }
+        provider: { type: string, enum: [chatgpt, anthropic, deepseek, grok] }
+    SourcePassage:
+      type: object
+      required: [id, title, text]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        text: { type: string }
+        url: { type: string }
+    RewriteResult:
+      type: object
+      required: [text, provider, model, sources, retrievedAt]
+      properties:
+        text: { type: string }
+        provider: { type: string }
+        model: { type: string }
+        retrievedAt: { type: string }
+        sources:
+          type: array
+          items:
+            $ref: "#/components/schemas/SourcePassage"
     HealthStatus:
       type: object
       properties:

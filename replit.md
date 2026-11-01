@@ -1,6 +1,6 @@
-# [Project name]
+# Kuczynski Rewriter
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Rewrites user-supplied target text using authentic Kuczynski corpus passages and a choice of ChatGPT, Anthropic, DeepSeek, or Grok.
 
 ## Run & Operate
 
@@ -26,7 +26,17 @@ _Populate as you build — short repo map plus pointers to the source-of-truth f
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Source retrieval must succeed before any model request. Never fall back to unsupported style imitation.
+- The Kuczynski key is distinct from a Genius 101 account key.
+- No account, payments, or permanent server-side text storage is needed for this scoped tool.
+
+## Corpus integration blocker
+
+The Kuczynski API key is saved securely, but its corpus endpoint and request/response contract have not been established. The public Genius 101 site does not expose corpus API documentation at the documentation locations inspected. Do not assume that the site's internal chat endpoint is a corpus retrieval API.
+
+The server intentionally reports this missing configuration and refuses to rewrite. `KUCZYNSKI_API_URL` must only be configured after confirming the correct endpoint and adapting `artifacts/api-server/src/lib/rewriter.ts` to its actual contract. The current adapter is a provisional JSON POST `{query, limit}` with Bearer authorization and passage-array parsing, not a verified Genius 101 contract. No credential has been sent to an unconfirmed endpoint.
+
+Model access is provisioned through Replit AI Integrations for OpenRouter. Model IDs were discovered from OpenRouter's models API. End-to-end corpus retrieval and rewriting are NOT verified.
 
 ## Product
 
