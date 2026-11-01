@@ -2,7 +2,7 @@
 name: Source-grounded rewriting
 description: The core product requirement for corpus-backed style rewriting.
 ---
-The app must rewrite target text in John-Michael Kuczynski's style using API access to his actual work, not by "winging it." Users must be able to choose ChatGPT, Anthropic, DeepSeek, or Grok.
+The app must rewrite target text in John-Michael Kuczynski's style using API access to his actual work, not by "winging it." Users must be able to choose ChatGPT, Anthropic, DeepSeek, or Grok. The user clarified that the corpus API is part of their Genius 101 app.
 
 **Why:** The user explicitly identified access to Kuczynski's work through his API key as the essence of the product.
 
