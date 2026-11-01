@@ -1,0 +1,1 @@
+- [Source-grounded rewriting](source-grounded-rewriting.md) — rewrites must use the Kuczynski corpus API, not unsupported style imitation.
